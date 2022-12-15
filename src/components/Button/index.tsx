@@ -7,9 +7,9 @@ export interface ButtonProps {
   children: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>> = ({ theme = 'primary', children }) => {
+const Button: React.FC<ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>> = ({ theme = 'primary', children, ...props }) => {
   return (
-    <Container buttonTheme={theme}>{children}</Container>
+    <Container buttonTheme={theme} {...props}>{children}</Container>
   );
 }
 
