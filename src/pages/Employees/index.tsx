@@ -105,7 +105,7 @@ const Employees: React.FC = () => {
       </Main>
 
       <DeleteModal employee={showDeleteModal} close={() => setShowDeleteModal(null)} />
-      <EditEmployeeModal employee={showEditModal} close={() => setShowEditModal(null)} />
+      <EditEmployeeModal mode='update' employee={showEditModal} close={() => setShowEditModal(null)} />
     </Container>
   );
 }
