@@ -18,7 +18,7 @@ const options = [
 interface EditEmployeeModalProps {
   employee: Employee | null;
   close: () => void;
-  mode: 'create' | 'update';
+  open: boolean;
 }
 
 const newEmployee: Employee = {
@@ -35,14 +35,14 @@ const newEmployee: Employee = {
   vt: 0,
 }
 
-const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, mode }) => {
+const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, open }) => {
   const modalRef: Ref<HTMLDialogElement> = useRef(null);
 
-  const [values, setValues] = useState<Employee>(employee || newEmployee);
+  const [values, setValues] = useState<Employee>(newEmployee);
 
-  // @TODO: handle selects
+  // @TODO: handle selects RE1QUIREDDDD
   async function handleSubmit() {
-    const request = mode === 'create' ? api.post : api.put;
+    const request = employee ? api.post : api.put;
 
     await request('/hotelaria/demo/employee', values);
 
@@ -54,12 +54,14 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
   }
 
   useEffect(() => {
-    if (employee) {
+    if (open) {
       modalRef.current?.showModal();
+      employee && setValues(employee);
     } else {
       modalRef.current?.close();
+      setValues(newEmployee);
     }
-  }, [employee]);
+  }, [open]);
 
   return (
     <Container ref={modalRef}>
@@ -75,6 +77,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Primeiro nome'
               value={values.firstName}
               onChange={onChange}
+              required
             />
             <Input
               type='text'
@@ -83,6 +86,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Último nome'
               value={values.lastName}
               onChange={onChange}
+              required
             />
           </InputRow>
           <InputRow>
@@ -93,6 +97,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='E-mail'
               value={values.email}
               onChange={onChange}
+              required
             />
           </InputRow>
           <InputRow>
@@ -103,6 +108,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='CPF'
               value={values.cpf}
               onChange={onChange}
+              required
             />
             <Input
               type='text'
@@ -111,6 +117,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Telefone'
               value={values.phoneNumber}
               onChange={onChange}
+              required
             />
           </InputRow>
           <InputRow>
@@ -121,6 +128,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Endereço (Cidade - Estado)'
               value={values.address}
               onChange={onChange}
+              required
             />
           </InputRow>
         </fieldset>
@@ -142,6 +150,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               isMulti
               placeholder=''
               label='Cargo'
+              required
             />
           </InputRow>
           <InputRow>
@@ -152,6 +161,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Salário (R$)'
               value={values.salary}
               onChange={onChange}
+              required
             />
             <Input
               type='number'
@@ -160,6 +170,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Vale refeição (R$)'
               value={values.vr}
               onChange={onChange}
+              required
             />
             <Input
               type='number'
@@ -168,6 +179,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
               label='Vale transporte (R$)'
               value={values.vt}
               onChange={onChange}
+              required
             />
           </InputRow>
         </fieldset>

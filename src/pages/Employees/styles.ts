@@ -54,19 +54,6 @@ export const Table = styled.table`
 `;
 
 export const Employee = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-
-  img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    
-    border: 1px solid #D9D9D9;
-    border-radius: 50%;
-  }
-
   span {
     font-size: 0.875rem;
     color: #9D9D9D;

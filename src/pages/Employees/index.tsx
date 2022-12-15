@@ -28,7 +28,8 @@ const employee: IEmployee = {
 
 const Employees: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<IEmployee | null>(null);
-  const [showEditModal, setShowEditModal] = useState<IEmployee | null>(null);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<IEmployee | null>(null);
 
   return (
     <Container>
@@ -36,7 +37,7 @@ const Employees: React.FC = () => {
       <Main>
         <header>
           <H1>Funcionários</H1>
-          <Button>Adicionar funcionários</Button>
+          <Button onClick={() => setShowEditModal(true)}>Adicionar funcionários</Button>
         </header>
 
         <Table>
@@ -55,11 +56,8 @@ const Employees: React.FC = () => {
             <tr>
               <td>
                 <Employee>
-                  <img src='https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' alt='' />
-                  <div>
-                    <p>Mohammed Silva</p>
-                    <span>Supervisor de reservas</span>
-                  </div>
+                  <p>Mohammed Silva</p>
+                  <span>Supervisor de reservas</span>
                 </Employee>
               </td>
               <td>999999999/99</td>
@@ -90,7 +88,7 @@ const Employees: React.FC = () => {
               </td>
               <td>
                 <Actions>
-                  <button onClick={() => setShowEditModal(employee)}>
+                  <button onClick={() => { setShowEditModal(true); setSelectedEmployee(employee) }}>
                     <Edit size={24} color='#575757'/>
                   </button>
 
@@ -105,7 +103,12 @@ const Employees: React.FC = () => {
       </Main>
 
       <DeleteModal employee={showDeleteModal} close={() => setShowDeleteModal(null)} />
-      <EditEmployeeModal mode='update' employee={showEditModal} close={() => setShowEditModal(null)} />
+      
+      <EditEmployeeModal
+        employee={selectedEmployee}
+        open={showEditModal}
+        close={() => { setShowEditModal(false); setSelectedEmployee(null) }}
+      />
     </Container>
   );
 }
