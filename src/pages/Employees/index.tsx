@@ -8,11 +8,27 @@ import H1 from '../../components/H1';
 import DeleteModal from '../../components/DeleteModal';
 import EditEmployeeModal from '../../components/EditEmployeeModal';
 
+import { Employee as IEmployee } from '../../types/employee';
+
 import { Container, Main, Table, Employee, Contacts, Units, Salary, Actions } from './styles';
 
+const employee: IEmployee = {
+  address: 'Rua Teste',
+  cpf: '18238230',
+  email: 'teste@example.com',
+  firstName: 'Vitoria',
+  lastName: 'Bezerra',
+  healthPlan: '1bhdsa89',
+  phoneNumber: '123124345',
+  role: 'Softwqre engigeieiei', 
+  salary: 1232,
+  vr: 123131,
+  vt: 123,
+}
+
 const Employees: React.FC = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<IEmployee | null>(null);
+  const [showEditModal, setShowEditModal] = useState<IEmployee | null>(null);
 
   return (
     <Container>
@@ -74,11 +90,11 @@ const Employees: React.FC = () => {
               </td>
               <td>
                 <Actions>
-                  <button onClick={() => setShowEditModal(true)}>
+                  <button onClick={() => setShowEditModal(employee)}>
                     <Edit size={24} color='#575757'/>
                   </button>
 
-                  <button onClick={() => setShowDeleteModal(true)}>
+                  <button onClick={() => setShowDeleteModal(employee)}>
                     <Delete size={24} color='#575757'/>
                   </button>
                 </Actions>
@@ -88,8 +104,8 @@ const Employees: React.FC = () => {
         </Table>
       </Main>
 
-      <DeleteModal open={showDeleteModal} close={() => setShowDeleteModal(false)} />
-      <EditEmployeeModal open={showEditModal} close={() => setShowEditModal(false)} />
+      <DeleteModal employee={showDeleteModal} close={() => setShowDeleteModal(null)} />
+      <EditEmployeeModal employee={showEditModal} close={() => setShowEditModal(null)} />
     </Container>
   );
 }

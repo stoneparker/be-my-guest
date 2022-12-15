@@ -4,6 +4,7 @@ import Button from '../../components/Button';
 import H1 from '../../components/H1';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
+import { Employee } from '../../types/employee';
 
 import { Container, Form, InputRow } from './styles';
 
@@ -14,11 +15,11 @@ const options = [
 ]
 
 interface EditEmployeeModalProps {
-  open: boolean;
+  employee: Employee | null;
   close: () => void;
 }
 
-const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ open, close }) => {
+const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close }) => {
   const modalRef: Ref<HTMLDialogElement> = useRef(null);
 
   function handleSubmit() {
@@ -26,12 +27,12 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ open, close }) =>
   }
 
   useEffect(() => {
-    if (open) {
+    if (employee) {
       modalRef.current?.showModal();
     } else {
       modalRef.current?.close();
     }
-  }, [open]);
+  }, [employee]);
 
   return (
     <Container ref={modalRef}>

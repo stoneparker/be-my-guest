@@ -1,28 +1,31 @@
-import { useEffect, useRef, Ref } from 'react';
+import { useEffect, useRef, Ref, FormEvent } from 'react';
 
 import Button from '../../components/Button';
+import { api } from '../../services/server';
+import { Employee } from '../../types/employee';
 
 import { Container, Form } from './styles';
 
 interface DeleteModalProps {
-  open: boolean;
+  employee: Employee | null;
   close: () => void;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ open, close }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ employee, close }) => {
   const modalRef: Ref<HTMLDialogElement> = useRef(null);
 
-  function handleSubmit() {
+  async function handleSubmit(e: FormEvent) {
+    await api.delete(`/hotelaria/demo/employee/${employee?.cpf}`);
     close();
   }
 
   useEffect(() => {
-    if (open) {
+    if (employee) {
       modalRef.current?.showModal();
     } else {
       modalRef.current?.close();
     }
-  }, [open]);
+  }, [employee]);
 
   return (
     <Container ref={modalRef}>
@@ -35,7 +38,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ open, close }) => {
         </article>
         <footer>
           <menu>
-            <Button type='submit' theme='secondary'>
+            <Button type='button' theme='secondary' onClick={close}>
               Cancelar
             </Button>
             <Button type='submit' value='confirm' theme='danger'>Excluir</Button>
