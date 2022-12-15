@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 
 import { Mail, Call, Info, Delete, Edit } from 'styled-icons/material-rounded';
 
@@ -11,6 +11,7 @@ import EditEmployeeModal from '../../components/EditEmployeeModal';
 import { Employee as IEmployee } from '../../types/employee';
 
 import { Container, Main, Table, Employee, Contacts, Units, Salary, Actions } from './styles';
+import { api } from '../../services/server';
 
 const employee: IEmployee = {
   address: 'Rua Teste',
@@ -30,6 +31,22 @@ const Employees: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<IEmployee | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<IEmployee | null>(null);
+
+  const [employees, setEmployees] = useState<IEmployee[]>([]); 
+
+  async function getEmployees() {
+    try {
+      const response = await api.get('/hotelaria/demo/employee');
+      setEmployees(response.data);
+    } catch (e) {
+      console.error(e);
+      setEmployees([employee, employee]);
+    }
+  }
+
+  useEffect(() => {
+    getEmployees();
+  }, []);
 
   return (
     <Container>
@@ -53,57 +70,59 @@ const Employees: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <Employee>
-                  <p>Mohammed Silva</p>
-                  <span>Supervisor de reservas</span>
-                </Employee>
-              </td>
-              <td>999999999/99</td>
-              <td>
-                <Contacts>
-                  <p>
-                    <Mail size={21} color='#C3C3C3' />
-                    email@example.com
-                  </p>
-                  <p>
-                    <Call size={21} color='#C3C3C3' />
-                    (11) 9 9999-9999
-                  </p>
-                </Contacts>
-              </td>	
-              <td>Recife - PE</td>
-              <td>
-                <Units>
-                  <span>Recife - PE</span>
-                  <span>São Luís - MA</span>
-                </Units>
-              </td>
-              <td>
-                <Salary>
-                  R$ 9500.00
-                  <Info size={18} color='#C3C3C3'/>
-                </Salary>
-              </td>
-              <td>
-                <Actions>
-                  <button onClick={() => { setShowEditModal(true); setSelectedEmployee(employee) }}>
-                    <Edit size={24} color='#575757'/>
-                  </button>
+            { employees.map((employee: IEmployee) => (
+              <tr>
+                <td>
+                  <Employee>
+                    <p>{employee.firstName + employee.lastName}</p>
+                    <span>Supervisor de reservas</span>
+                  </Employee>
+                </td>
+                <td>{employee.cpf}</td>
+                <td>
+                  <Contacts>
+                    <p>
+                      <Mail size={21} color='#C3C3C3' />
+                      {employee.email}
+                    </p>
+                    <p>
+                      <Call size={21} color='#C3C3C3' />
+                      {employee.phoneNumber}
+                    </p>
+                  </Contacts>
+                </td>	
+                <td>{employee.address}</td>
+                <td>
+                  <Units>
+                    <span>Recife - PE</span>
+                    <span>São Luís - MA</span>
+                  </Units>
+                </td>
+                <td>
+                  <Salary>
+                    R$ {employee.salary + employee.vr + employee.vt}
+                    <Info size={18} color='#C3C3C3'/>
+                  </Salary>
+                </td>
+                <td>
+                  <Actions>
+                    <button onClick={() => { setShowEditModal(true); setSelectedEmployee(employee) }}>
+                      <Edit size={24} color='#575757'/>
+                    </button>
 
-                  <button onClick={() => setShowDeleteModal(employee)}>
-                    <Delete size={24} color='#575757'/>
-                  </button>
-                </Actions>
-              </td>
+                    <button onClick={() => setShowDeleteModal(employee)}>
+                      <Delete size={24} color='#575757'/>
+                    </button>
+                  </Actions>
+                </td>
             </tr>
+          ))}
           </tbody>
         </Table>
       </Main>
 
       <DeleteModal employee={showDeleteModal} close={() => setShowDeleteModal(null)} />
-      
+
       <EditEmployeeModal
         employee={selectedEmployee}
         open={showEditModal}
