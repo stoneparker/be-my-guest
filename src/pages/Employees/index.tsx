@@ -37,7 +37,7 @@ const Employees: React.FC = () => {
   async function getEmployees() {
     try {
       const response = await api.get('/hotelaria/demo/employee');
-      setEmployees(response.data);
+      setEmployees(response.data.content);
     } catch (e) {
       console.error(e);
       setEmployees([employee, employee]);

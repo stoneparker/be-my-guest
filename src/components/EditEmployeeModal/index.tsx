@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, Ref } from 'react';
+import { OptionProps } from 'react-select';
 
 import Button from '../../components/Button';
 import H1 from '../../components/H1';
@@ -36,11 +37,13 @@ const newEmployee: Employee = {
 }
 
 const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, open }) => {
+  const [values, setValues] = useState<Employee>(newEmployee);
+  const [unitsOptions, setUnitsOptions] = useState<OptionProps[]>([]);
+  const [rolesOptions, setRolesOptions] = useState<OptionProps[]>([]);
+
   const modalRef: Ref<HTMLDialogElement> = useRef(null);
 
-  const [values, setValues] = useState<Employee>(newEmployee);
-
-  // @TODO: handle selects RE1QUIREDDDD
+  // @TODO: handle selects
   async function handleSubmit() {
     const request = employee ? api.post : api.put;
 
@@ -53,14 +56,28 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
     setValues({ ...values, [e.currentTarget.name]: e.target.value });
   }
 
+  async function getUnitsOptions() {
+
+  }
+
+  async function getRolesOptions() {
+
+  }
+
   useEffect(() => {
     if (open) {
       modalRef.current?.showModal();
+
       employee && setValues(employee);
-    } else {
-      modalRef.current?.close();
-      setValues(newEmployee);
+
+      getUnitsOptions();
+      getRolesOptions();
+
+      return;
     }
+
+    modalRef.current?.close();
+    setValues(newEmployee);
   }, [open]);
 
   return (
