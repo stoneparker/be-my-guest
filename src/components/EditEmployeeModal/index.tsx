@@ -75,7 +75,6 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
     if (employee) {
       await api.put('/employee', data);
 
-
       for (const unit of selectedUnits) {
         const worksFor = {
           cpf: data.cpf,
@@ -90,7 +89,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
         }
       }
     } else {
-      await api.post('/employee', { employee: data });
+      await api.post('/employee', data);
 
       for (const unit of selectedUnits) {
         const worksFor = {
