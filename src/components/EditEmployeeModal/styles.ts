@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.dialog`
   border: none;
   max-height: 80%;
-  max-width: 35%;
+  max-width: 45%;
   
   &::backdrop {
     background: rgba(0, 0, 0, 0.15);

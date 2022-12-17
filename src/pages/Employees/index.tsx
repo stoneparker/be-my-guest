@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-import { Mail, Call, Info, Delete, Edit } from 'styled-icons/material-rounded';
+import { Info, Delete, Edit } from 'styled-icons/material-rounded';
 
 import Header from '../../components/Header';
 import Button from '../../components/Button';
@@ -8,40 +8,33 @@ import H1 from '../../components/H1';
 import DeleteModal from '../../components/DeleteModal';
 import EditEmployeeModal from '../../components/EditEmployeeModal';
 
-import { Employee as IEmployee } from '../../types/employee';
+import { EmployeeList } from '../../types';
 
 import { Container, Main, Table, Employee, Contacts, Units, Salary, Actions } from './styles';
 import { api } from '../../services/server';
 
-const employee: IEmployee = {
-  address: 'Rua Teste',
-  cpf: '18238230',
-  email: 'teste@example.com',
-  firstName: 'Vitoria',
-  lastName: 'Bezerra',
-  healthPlan: '1bhdsa89',
-  phoneNumber: '123124345',
-  role: 'Softwqre engigeieiei', 
-  salary: 1232,
-  vr: 123131,
-  vt: 123,
-}
-
 const Employees: React.FC = () => {
-  const [showDeleteModal, setShowDeleteModal] = useState<IEmployee | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<EmployeeList | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<IEmployee | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeList | null>(null);
 
-  const [employees, setEmployees] = useState<IEmployee[]>([]); 
+  const [employees, setEmployees] = useState<EmployeeList[]>([]); 
 
   async function getEmployees() {
     try {
-      const response = await api.get('/hotelaria/demo/employee');
-      setEmployees(response.data.content);
+      const response = await api.get('/employee');
+      console.log(JSON.parse(response.data));
+      setEmployees(JSON.parse(response.data));
     } catch (e) {
       console.error(e);
-      setEmployees([employee, employee]);
+      alert('Algo deu errado, tente novamente.')
     }
+  }
+
+  function closeEditModal() {
+    setShowEditModal(false)
+    setSelectedEmployee(null);
+    getEmployees();
   }
 
   useEffect(() => {
@@ -62,55 +55,45 @@ const Employees: React.FC = () => {
             <tr>
               <th scope='col'>Funcionário</th>
               <th scope='col'>CPF</th>
-              <th scope='col'>Contatos</th>
-              <th scope='col'>Endereço</th>
+              <th scope='col'>Contrato</th>
+              <th scope='col'>CPF Supervisor</th>
               <th scope='col'>Unidades</th>
               <th scope='col'>Remuneração</th>
               <th scope='col'>Ações</th>
             </tr>
           </thead>
           <tbody>
-            { employees.map((employee: IEmployee) => (
-              <tr>
+            { employees.map((item: EmployeeList) => (
+              <tr key={item.employee.cpf}>
                 <td>
                   <Employee>
-                    <p>{employee.firstName + employee.lastName}</p>
-                    <span>Supervisor de reservas</span>
+                    <p>{item.employee.namFirstName} {item.employee.namLastName}</p>
+                    <span>{item.roles.role_name}</span>
                   </Employee>
                 </td>
-                <td>{employee.cpf}</td>
-                <td>
-                  <Contacts>
-                    <p>
-                      <Mail size={21} color='#C3C3C3' />
-                      {employee.email}
-                    </p>
-                    <p>
-                      <Call size={21} color='#C3C3C3' />
-                      {employee.phoneNumber}
-                    </p>
-                  </Contacts>
-                </td>	
-                <td>{employee.address}</td>
+                <td>{item.employee.cpf}</td>
+                <td>{item.employee.contract_type}</td>
+                <td>{item.employee.idSup}</td>
                 <td>
                   <Units>
-                    <span>Recife - PE</span>
-                    <span>São Luís - MA</span>
+                    { item.unitList.map((unit) => (
+                      <span key={unit.cnpj}>{unit.tradeMark}</span>
+                    ) ) }
                   </Units>
                 </td>
                 <td>
                   <Salary>
-                    R$ {employee.salary + employee.vr + employee.vt}
+                    R$ {item.employee.salary + item.employee.vr + item.employee.vt + item.healthPlan.pricePerEmployee}
                     <Info size={18} color='#C3C3C3'/>
                   </Salary>
                 </td>
                 <td>
                   <Actions>
-                    <button onClick={() => { setShowEditModal(true); setSelectedEmployee(employee) }}>
+                    <button onClick={() => { setShowEditModal(true); setSelectedEmployee(item) }}>
                       <Edit size={24} color='#575757'/>
                     </button>
 
-                    <button onClick={() => setShowDeleteModal(employee)}>
+                    <button onClick={() => setShowDeleteModal(item)}>
                       <Delete size={24} color='#575757'/>
                     </button>
                   </Actions>
@@ -126,7 +109,8 @@ const Employees: React.FC = () => {
       <EditEmployeeModal
         employee={selectedEmployee}
         open={showEditModal}
-        close={() => { setShowEditModal(false); setSelectedEmployee(null) }}
+        close={closeEditModal}
+        employeesList={employees}
       />
     </Container>
   );

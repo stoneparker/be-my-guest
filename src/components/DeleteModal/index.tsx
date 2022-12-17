@@ -2,12 +2,12 @@ import { useEffect, useRef, Ref, FormEvent } from 'react';
 
 import Button from '../../components/Button';
 import { api } from '../../services/server';
-import { Employee } from '../../types/employee';
+import { EmployeeList } from '../../types';
 
 import { Container, Form } from './styles';
 
 interface DeleteModalProps {
-  employee: Employee | null;
+  employee: EmployeeList | null;
   close: () => void;
 }
 
@@ -15,7 +15,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ employee, close }) => {
   const modalRef: Ref<HTMLDialogElement> = useRef(null);
 
   async function handleSubmit(e: FormEvent) {
-    await api.delete(`/hotelaria/demo/employee/${employee?.cpf}`);
+    await api.delete(`/employee/${employee?.employee.cpf}`);
     close();
   }
 

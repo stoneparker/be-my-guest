@@ -5,13 +5,14 @@ import theme from '../../themes/default';
 export const Container = styled.div`
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
 `;
 
 export const Main = styled.main<{ theme: typeof theme }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px 80px;
+  padding: 40px 50px;
 
   header {
     display: flex;
@@ -24,6 +25,7 @@ export const Main = styled.main<{ theme: typeof theme }>`
 
 export const Table = styled.table`
   border-collapse: collapse;
+  overflow: hidden;
 
   thead {
     border-bottom: 15px solid ${props => props.theme.background};
@@ -74,7 +76,7 @@ export const Contacts = styled.div`
 export const Units = styled.div`
   display: flex;
   gap: 5px;
-  max-width: 200px;
+  max-width: 150px;
   flex-wrap: wrap;
 
   span {

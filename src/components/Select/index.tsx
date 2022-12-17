@@ -24,7 +24,7 @@ const Select: React.FC<SelectProps> = ({ label, ...props }) => {
         })}
         styles={{
           container: (styles) => ({ ...styles, width: '100%' }),
-          control: (styles) => ({ ...styles, height: '42px' }),
+          control: (styles) => ({ ...styles, minHeight: '42px' }),
           multiValue: (styles) => {
             return {
               ...styles,
