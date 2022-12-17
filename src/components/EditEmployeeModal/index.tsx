@@ -79,7 +79,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
         } }
       );
 
-      console.log({ response });
+      console.log({ response })
 
       for (const unit of selectedUnits) {
         const worksFor = {
