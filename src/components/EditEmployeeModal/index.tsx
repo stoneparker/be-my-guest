@@ -73,7 +73,13 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
     console.log(data);
 
     if (employee) {
-      await api.put('/employee', data);
+      const response = await api.put('/employee', data,
+        { headers: {
+          'Content-Type': 'application/json',
+        } }
+      );
+
+      console.log({ response });
 
       for (const unit of selectedUnits) {
         const worksFor = {

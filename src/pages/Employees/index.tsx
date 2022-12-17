@@ -90,7 +90,6 @@ const Employees: React.FC = () => {
                 <td>
                   <Salary>
                     R$ {item.employee.salary + item.employee.vr + item.employee.vt + item.healthPlan.pricePerEmployee}
-                    <Info size={18} color='#C3C3C3'/>
                   </Salary>
                 </td>
                 <td>
