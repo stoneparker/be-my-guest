@@ -10,13 +10,15 @@ import EditEmployeeModal from '../../components/EditEmployeeModal';
 
 import { EmployeeList } from '../../types';
 
-import { Container, Main, Table, Employee, Contacts, Units, Salary, Actions } from './styles';
+import { Container, Main, Table, Employee, Units, Salary, Actions } from './styles';
 import { api } from '../../services/server';
 
 const Employees: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<EmployeeList | null>(null);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeList | null>(null);
+
+  const [loading, setLoading] = useState(false);
 
   const [employees, setEmployees] = useState<EmployeeList[]>([]); 
 
@@ -28,6 +30,8 @@ const Employees: React.FC = () => {
     } catch (e) {
       console.error(e);
       alert('Algo deu errado, tente novamente.')
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -38,6 +42,7 @@ const Employees: React.FC = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
     getEmployees();
   }, []);
 
@@ -50,6 +55,7 @@ const Employees: React.FC = () => {
           <Button onClick={() => setShowEditModal(true)}>Adicionar funcionários</Button>
         </header>
 
+        { loading ? <p>Carregando funcionários...</p> : (
         <Table>
           <thead>
             <tr>
@@ -102,6 +108,7 @@ const Employees: React.FC = () => {
           ))}
           </tbody>
         </Table>
+        ) }
       </Main>
 
       <DeleteModal employee={showDeleteModal} close={() => setShowDeleteModal(null)} />

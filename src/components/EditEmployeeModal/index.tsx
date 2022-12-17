@@ -75,15 +75,20 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({ employee, close, 
     if (employee) {
       await api.put('/employee', data);
 
-      // for (const unit of selectedUnits) {
-      //   const worksFor = {
-      //     cpf: data.cpf,
-      //     cnpj: unit.value,
-      //     tradeMark: unit.label,
-      //   }
 
-      //   await api.put('/worksFor', worksFor);
-      // }
+      for (const unit of selectedUnits) {
+        const worksFor = {
+          cpf: data.cpf,
+          cnpj: unit.value,
+          tradeMark: unit.label,
+        }
+
+        if (employee.unitList.some(u => u.cnpj + '' === unit.value)) {
+          await api.post('/worksFor', worksFor);
+        } else {
+          await api.delete(`/worksFor/${data.cpf}`);
+        }
+      }
     } else {
       await api.post('/employee', { employee: data });
 

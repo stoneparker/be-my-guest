@@ -62,17 +62,6 @@ export const Employee = styled.div`
   }
 `;
 
-export const Contacts = styled.div`
-  p {
-    display: flex;
-    gap: 10px;
-
-    &:not(:last-child) {
-      margin-bottom: 5px;
-    }
-  }
-`;
-
 export const Units = styled.div`
   display: flex;
   gap: 5px;
