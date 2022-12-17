@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite serve dist",
+    "serve": "vite serve dist"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.26",
